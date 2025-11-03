@@ -11,8 +11,8 @@
   ],
   "require": {
     "php": "^8.1",
-    "illuminate/support": "^10.0",
-    "illuminate/database": "^10.0",
+    "illuminate/support": "^10.0|^11.0",
+    "illuminate/database": "^10.0|^11.0",
     "spatie/laravel-permission": "^5.5",
     "barryvdh/laravel-dompdf": "^2.0"
   },
@@ -21,11 +21,23 @@
       "Kuroragi\\GeneralHelper\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Kuroragi\\GeneralHelper\\Tests\\": "tests/"
+    }
+  },
   "extra": {
     "laravel": {
       "providers": [
         "Kuroragi\\GeneralHelper\\Providers\\GeneralHelperServiceProvider"
       ]
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "post-autoload-dump": [
+      "@php artisan package:discover --ansi || true"
+    ]
   }
 }
