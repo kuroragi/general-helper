@@ -1,0 +1,31 @@
+{
+  "name": "kuroragi/general-helper",
+  "description": "General helpers, blameable trait, activity log service, and macros for Laravel.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kuroragi",
+      "email": "kuroragidigitalstudio@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "illuminate/support": "^10.0",
+    "illuminate/database": "^10.0",
+    "spatie/laravel-permission": "^5.5",
+    "barryvdh/laravel-dompdf": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kuroragi\\GeneralHelper\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Kuroragi\\GeneralHelper\\Providers\\GeneralHelperServiceProvider"
+      ]
+    }
+  }
+}
