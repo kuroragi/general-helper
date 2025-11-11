@@ -53,7 +53,7 @@ trait Blameable
         if (config('kuroragi.auth_model')) {
             // still use Auth facade to get id, but allow custom guard later if needed
         }
-        return Auth::id();
+        return Auth::user()->id;
     }
 
     protected function authModel()
