@@ -38,7 +38,6 @@ class GeneralHelperServiceProvider extends ServiceProvider
 
         // register macros
         EloquentMacros::register();
-        BlueprintMacros::register();
 
         // schedule rolling weekly at configured time
         $this->app->booted(function () {

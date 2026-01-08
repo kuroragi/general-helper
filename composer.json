@@ -1,6 +1,6 @@
 {
   "name": "kuroragi/general-helper",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "description": "General helpers, blameable trait, activity log service, and macros for Laravel.",
   "type": "library",
   "license": "MIT",
