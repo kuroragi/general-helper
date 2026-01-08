@@ -36,7 +36,48 @@ class Post extends Model
 
 ---
 
-### 2. Blameable Macro
+### 2. Blameable Migration Macro
+
+Menambahkan _macro_ Blueprint untuk migration, sehingga kolom blameable dapat ditambahkan dengan mudah:
+
+```php
+// Di dalam migration file
+Schema::create('posts', function (Blueprint $table) {
+    $table->id();
+    $table->string('title');
+    $table->text('content');
+    $table->timestamps();
+    $table->softDeletes();
+    
+    // Menambahkan kolom created_by, updated_by, deleted_by sekaligus
+    $table->blameable();
+});
+```
+
+**Variasi penggunaan:**
+
+```php
+// Dengan foreign key ke tabel users (default)
+$table->blameable();
+
+// Dengan foreign key ke tabel custom
+$table->blameable('admins');
+
+// Tanpa foreign key constraint
+$table->blameable(null, false);
+
+// Hanya kolom tertentu
+$table->createdBy();
+$table->updatedBy();
+$table->deletedBy();
+
+// Drop kolom blameable (untuk rollback)
+$table->dropBlameable('posts'); // parameter: nama tabel saat ini
+```
+
+---
+
+### 3. Blameable Query Macro
 
 Menambahkan _macro_ Eloquent Query Builder:
 
@@ -54,7 +95,7 @@ Post::createdBy(auth()->id())->get();
 
 ---
 
-### 3. Activity Log Service
+### 4. Activity Log Service
 
 Service ini bertugas mencatat setiap transaksi penting ke dalam file log di:
 
@@ -88,7 +129,7 @@ ActivityLogger::info('User membuat data baru', [
 
 ---
 
-### 4. Activity Log Reader
+### 5. Activity Log Reader
 
 Menyediakan service untuk membaca isi log aktivitas.
 
@@ -116,7 +157,7 @@ $logs = ActivityLogReader::range('2025-11-01', '2025-11-02');
 
 ---
 
-### 5. General Helper Class
+### 6. General Helper Class
 
 Berisi kumpulan fungsi statis umum yang sering digunakan pada proyek Laravel.
 
@@ -251,7 +292,9 @@ kuroragi-general-helper/
 │ │ ├─ ActivityLogReader.php
 │ │ └─ Commands/RollActivityLogs.php
 │ ├─ Providers/GeneralHelperServiceProvider.php
-│ └─ Macros/EloquentMacros.php
+│ └─ Macros/
+│   ├─ EloquentMacros.php
+│   └─ BlueprintMacros.php
 ├─ config/kuroragi.php
 ├─ resources/
 ├─ README.md

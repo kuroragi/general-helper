@@ -9,6 +9,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Kuroragi\GeneralHelper\ActivityLog\ActivityLogger;
 use Kuroragi\GeneralHelper\ActivityLog\Commands\RollActivityLogs;
 use Kuroragi\GeneralHelper\Macros\EloquentMacros;
+use Kuroragi\GeneralHelper\Macros\BlueprintMacros;
 
 class GeneralHelperServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,7 @@ class GeneralHelperServiceProvider extends ServiceProvider
 
         // register macros
         EloquentMacros::register();
+        BlueprintMacros::register();
 
         // schedule rolling weekly at configured time
         $this->app->booted(function () {
