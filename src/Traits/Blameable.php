@@ -9,21 +9,21 @@ trait Blameable
     {
         static::creating(function ($model) {
             $userId = self::currentAuthId();
-            if ($userId && $model->isFillable('created_by')) {
+            if ($userId) {
                 $model->created_by = $userId;
             }
         });
 
         static::updating(function ($model) {
             $userId = self::currentAuthId();
-            if ($userId && $model->isFillable('updated_by')) {
+            if ($userId) {
                 $model->updated_by = $userId;
             }
         });
 
         static::deleting(function ($model) {
             $userId = self::currentAuthId();
-            if ($userId && $model->isFillable('deleted_by')) {
+            if ($userId) {
                 // soft delete: set deleted_by and save
                 if (method_exists($model, 'runSoftDelete')) {
                     $model->deleted_by = $userId;
@@ -53,7 +53,7 @@ trait Blameable
         if (config('kuroragi.auth_model')) {
             // still use Auth facade to get id, but allow custom guard later if needed
         }
-        return Auth::id();
+        return Auth::user()->id;
     }
 
     protected function authModel()
