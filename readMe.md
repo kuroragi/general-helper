@@ -223,8 +223,30 @@ composer require kuroragi/general-helper:*@dev
 Publikasikan konfigurasi (jika tersedia):
 
 ```bash
-php artisan vendor:publish --tag="kuroragi-general-helper-config"
+php artisan vendor:publish --tag=config --provider="Kuroragi\GeneralHelper\Providers\GeneralHelperServiceProvider"
 ```
+
+File konfigurasi akan dipublikasikan ke `config/kuroragi.php`. Berikut opsi yang tersedia:
+
+```php
+return [
+    'activity_log_path' => storage_path('logs/activity'),
+    'activity_log_file_prefix' => 'activity-',
+    'roll_day' => 'monday',
+    'roll_time' => '01:00', // HH:MM format
+    'default_reader_limit' => 50,
+    'auth_model' => null, // null => use config('auth.providers.users.model')
+];
+```
+
+**Penjelasan konfigurasi:**
+
+- `activity_log_path`: Path tempat menyimpan file log aktivitas
+- `activity_log_file_prefix`: Prefix nama file log
+- `roll_day`: Hari untuk merotasi log mingguan (sunday, monday, tuesday, dst.)
+- `roll_time`: Waktu untuk merotasi log (format HH:MM)
+- `default_reader_limit`: Jumlah baris default yang dibaca oleh ActivityLogReader
+- `auth_model`: Model untuk autentikasi (null akan menggunakan default dari config auth)
 
 ---
 
@@ -251,16 +273,21 @@ php artisan test --filter=Kuroragi
 
 ## 📦 Jadwal Roll Log
 
-Gunakan Laravel Scheduler untuk merotasi log mingguan:
-Tambahkan pada `app/Console/Kernel.php`:
+Paket ini **secara otomatis** mendaftarkan jadwal rotasi log mingguan melalui Service Provider.
+Scheduler akan berjalan sesuai dengan konfigurasi `roll_day` dan `roll_time` yang diatur di `config/kuroragi.php`.
 
-```php
-protected function schedule(Schedule $schedule)
-{
-    $schedule->call(function () {
-        \Kuroragi\GeneralHelper\Services\ActivityLogger::rotateWeekly();
-    })->weeklyOn(1, '01:00');
-}
+**Default:** Setiap hari Senin pukul 01:00
+
+Anda juga dapat menjalankan rotasi log secara manual dengan command:
+
+```bash
+php artisan kuroragi:roll-activity-logs
+```
+
+**Catatan:** Pastikan Laravel Scheduler berjalan dengan menambahkan cron entry:
+
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 ---

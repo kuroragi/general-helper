@@ -39,14 +39,14 @@ class GeneralHelperServiceProvider extends ServiceProvider
         // register macros
         EloquentMacros::register();
 
-        // schedule rolling weekly at configured time
-        $this->app->booted(function () {
-            $schedule = $this->app->make(Schedule::class);
+        // schedule rolling weekly at configured time (Laravel 12 compatible)
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
             $rollDay = config('kuroragi.roll_day', 'monday');
             $rollTime = config('kuroragi.roll_time', '01:00');
-            // schedule weekly on rollDay at rollTime
+            [$hour, $minute] = explode(':', $rollTime);
+
             $schedule->command('kuroragi:roll-activity-logs')
-                     ->weeklyOn($this->dayOfWeekNumber($rollDay), explode(':', $rollTime)[0], explode(':', $rollTime)[1]);
+                     ->weeklyOn($this->dayOfWeekNumber($rollDay), $hour, $minute);
         });
     }
 
