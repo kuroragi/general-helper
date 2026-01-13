@@ -157,7 +157,85 @@ $logs = ActivityLogReader::range('2025-11-01', '2025-11-02');
 
 ---
 
-### 6. General Helper Class
+### 6. Authorization Exception Handler
+
+Paket ini secara otomatis menangani **AuthorizationException (403)** ketika user mencoba mengakses halaman yang tidak diizinkan untuk role mereka.
+
+**Fitur:**
+
+- Redirect otomatis ke halaman dashboard (atau route lain yang dikonfigurasi)
+- Menampilkan pesan error melalui session flash message
+- Mendukung JSON response untuk AJAX/Livewire requests
+- Dapat dikonfigurasi sesuai kebutuhan
+
+**Cara kerja:**
+
+Ketika user mengakses route yang dilindungi oleh middleware permission/role dan mereka tidak memiliki akses:
+
+```php
+// Contoh route dengan middleware
+Route::get('/admin/users', [UserController::class, 'index'])
+    ->middleware('permission:manage users');
+```
+
+Jika user tanpa permission `manage users` mengakses route tersebut, mereka akan:
+- Diarahkan ke halaman dashboard
+- Mendapatkan pesan: "Kamu tidak memiliki hak akses ke halaman tersebut."
+
+**Menampilkan pesan di view:**
+
+```blade
+@if(session('no_access'))
+    <div class="alert alert-danger">
+        {{ session('no_access') }}
+    </div>
+@endif
+```
+
+**Konfigurasi:**
+
+Anda dapat mengubah perilaku di `config/kuroragi.php`:
+
+```php
+'authorization_exception' => [
+    'enabled' => true, // enable/disable handler
+    'redirect_type' => 'route', // 'route', 'url', 'back', 'home'
+    'redirect_to' => 'dashboard', // route name atau URL (tergantung redirect_type)
+    'session_key' => 'no_access', // key session flash message
+    'message' => 'Kamu tidak memiliki hak akses ke halaman tersebut.',
+    'json_response' => true, // handle AJAX/Livewire requests
+],
+```
+
+**Opsi Redirect Type:**
+
+- `'route'`: Redirect ke route name tertentu
+  ```php
+  'redirect_type' => 'route',
+  'redirect_to' => 'dashboard', // nama route
+  ```
+
+- `'url'`: Redirect ke URL tertentu
+  ```php
+  'redirect_type' => 'url',
+  'redirect_to' => '/admin/forbidden', // URL path
+  ```
+
+- `'back'`: Redirect ke halaman sebelumnya
+  ```php
+  'redirect_type' => 'back',
+  'redirect_to' => null, // diabaikan
+  ```
+
+- `'home'`: Redirect ke home page (/)
+  ```php
+  'redirect_type' => 'home',
+  'redirect_to' => null, // diabaikan
+  ```
+
+---
+
+### 7. General Helper Class
 
 Berisi kumpulan fungsi statis umum yang sering digunakan pada proyek Laravel.
 
@@ -247,6 +325,13 @@ return [
 - `roll_time`: Waktu untuk merotasi log (format HH:MM)
 - `default_reader_limit`: Jumlah baris default yang dibaca oleh ActivityLogReader
 - `auth_model`: Model untuk autentikasi (null akan menggunakan default dari config auth)
+- `authorization_exception`: Konfigurasi untuk menangani exception 403
+  - `enabled`: Aktifkan/nonaktifkan handler
+  - `redirect_type`: Tipe redirect ('route', 'url', 'back', 'home')
+  - `redirect_to`: Tujuan redirect (route name atau URL, tergantung redirect_type)
+  - `session_key`: Key untuk session flash message
+  - `message`: Pesan error yang ditampilkan
+  - `json_response`: Handle request JSON/AJAX
 
 ---
 
