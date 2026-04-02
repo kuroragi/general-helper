@@ -50,10 +50,7 @@ trait Blameable
 
     protected static function currentAuthId()
     {
-        if (config('kuroragi.auth_model')) {
-            // still use Auth facade to get id, but allow custom guard later if needed
-        }
-        return Auth::user()->id;
+        return Auth::id();
     }
 
     protected function authModel()

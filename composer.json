@@ -1,22 +1,44 @@
 {
   "name": "kuroragi/general-helper",
   "version": "1.1.0",
-  "description": "General helpers, blameable trait, activity log service, and macros for Laravel.",
+  "description": "General helpers, blameable trait, activity log service, and macros for Laravel ERP applications.",
   "type": "library",
+  "keywords": [
+    "laravel",
+    "helper",
+    "blameable",
+    "activity-log",
+    "erp",
+    "macro",
+    "blueprint",
+    "eloquent"
+  ],
+  "homepage": "https://github.com/kuroragi/general-helper",
   "license": "MIT",
   "authors": [
     {
       "name": "Kuroragi",
-      "email": "kuroragidigitalstudio@gmail.com"
+      "email": "kuroragidigitalstudio@gmail.com",
+      "role": "Developer"
     }
   ],
+  "support": {
+    "issues": "https://github.com/kuroragi/general-helper/issues",
+    "source": "https://github.com/kuroragi/general-helper"
+  },
   "require": {
     "php": "^8.1",
     "laravel/framework": "^10.0|^11.0|^12.0",
     "illuminate/support": "^10.0|^11.0|^12.0",
-    "illuminate/database": "^10.0|^11.0|^12.0",
-    "spatie/laravel-permission": "^5.5|^6.0|^7.0",
-    "barryvdh/laravel-dompdf": "^2.0|^3.0|^4.0"
+    "illuminate/database": "^10.0|^11.0|^12.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0|^9.0|^10.0",
+    "phpunit/phpunit": "^10.5|^11.0"
+  },
+  "suggest": {
+    "spatie/laravel-permission": "Required for role/permission-based authorization exception handling (^5.5|^6.0|^7.0)",
+    "barryvdh/laravel-dompdf": "Required for PDF generation features (^2.0|^3.0|^4.0)"
   },
   "autoload": {
     "psr-4": {
@@ -38,6 +60,7 @@
   "minimum-stability": "stable",
   "prefer-stable": true,
   "scripts": {
+    "test": "vendor/bin/phpunit",
     "post-autoload-dump": [
       "@php artisan package:discover --ansi || true"
     ]

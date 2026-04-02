@@ -40,6 +40,7 @@ class GeneralHelperServiceProvider extends ServiceProvider
 
         // register macros
         EloquentMacros::register();
+        BlueprintMacros::register();
 
         // schedule rolling weekly at configured time (Laravel 12 compatible)
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {

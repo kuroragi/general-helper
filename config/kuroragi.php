@@ -1,5 +1,17 @@
 <?php
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Config Version
+    |--------------------------------------------------------------------------
+    |
+    | Internal version for this config file. Used to detect stale published
+    | configs after a package upgrade. Compare against the package's expected
+    | version to know if the user needs to re-publish their config.
+    |
+    */
+    'config_version' => 2,
+
     'activity_log_path' => storage_path('logs/activity'),
     'activity_log_file_prefix' => 'activity-',
     'roll_day' => 'monday',
